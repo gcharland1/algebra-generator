@@ -126,7 +126,6 @@ def gen_random_operation_sequence(depth=4):
         while op == seq[-1]:
             op = random.sample(['', '+', '*', '^'], 1)[0]
         seq += op
-    print(seq)
     return seq
 
 
@@ -152,16 +151,23 @@ def append_section_to_file(f, title, qty, exercices=None):
 def gen_exercice_sheet():
     tex_file = 'latex/exercices_algebre.tex'
     output_dir = 'latex/out'
-
+    print('Generating latex files ... ')
     with open(tex_file, 'w') as f:
+        print('Importing header to latex file ...')
         import_tex_fragment(f, 'latex/header.txt')
+        print("Generating exercices:")
+        print("\tAdding section no. 1 with operations ['+', '*', '+*', '*+']")
         append_section_to_file(f, 'Add., Sous., Multip, Division', qty=30, exercices=['+', '+*', '*', '*+'])
+        print("\tAdding section no. 2 with operations ['^', '^+', '^*' '*^', '+^']")
         append_section_to_file(f, 'Carrés', qty=30, exercices=['^', '^+', '^*', '*^', '+^'])
+        print("\tAdding section no. 3 with operations []")
         append_section_to_file(f, "Aléatoire", qty=100, exercices=None)
+        print("Importing footer to latex file ...")
         import_tex_fragment(f, 'latex/footer.txt')
 
+    print("Compiling LaTeX file to: " + output_dir)
     cmd = ['pdflatex', '--output-directory', output_dir, tex_file]
-    proc = subprocess.Popen(cmd)
+    proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL)
     proc.communicate()
 
 
