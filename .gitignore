@@ -1,4 +1,5 @@
 *.swp
-latex/
+latex/*.pdf
 .idea/
 venv/
+*.pdf
